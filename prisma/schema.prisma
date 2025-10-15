@@ -1,0 +1,165 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  PLAYER   // Oyuncu
+  REFEREE  // Hakem
+  ADMIN    // Admin
+}
+
+enum SportType {
+  FOOTBALL    // Futbol
+  BASKETBALL  // Basketbol
+  VOLLEYBALL  // Voleybol
+  TENNIS      // Tenis
+  HANDBALL    // Hentbol
+  TABLETENNIS // Masa Tenisi
+  BADMINTON   // Badminton
+  ESPORTS     // E-Spor
+}
+
+model User {
+  id          String   @id @default(cuid())
+  adSoyad     String
+  tcNo        String   @unique
+  eposta      String   @unique
+  telNo       String
+  dogumTarihi DateTime
+  sifre       String
+  role        Role     @default(PLAYER)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  ownedTeams       Team[]              @relation("TeamCaptain")
+  teamMemberships  TeamMembership[]
+  refereeTournaments Tournament[]      @relation("TournamentReferee")
+
+  @@map("users")
+}
+
+model Team {
+  id            String     @id @default(cuid())
+  name          String
+  referenceCode String     @unique
+  sport         SportType  @default(FOOTBALL)
+  captainId     String
+  createdAt     DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+
+  // Relations
+  captain       User                        @relation("TeamCaptain", fields: [captainId], references: [id], onDelete: Cascade)
+  members       TeamMembership[]
+  tournaments   TournamentParticipation[]
+
+  @@map("teams")
+}
+
+model TeamMembership {
+  id        String   @id @default(cuid())
+  teamId    String
+  userId    String
+  joinedAt  DateTime @default(now())
+
+  // Relations
+  team      Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([teamId, userId])
+  @@map("team_memberships")
+}
+
+model Tournament {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  startDate   DateTime
+  endDate     DateTime
+  maxTeams    Int      @default(16)
+  status      TournamentStatus @default(UPCOMING)
+  refereeId   String?
+  categoryId  String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  referee     User?                       @relation("TournamentReferee", fields: [refereeId], references: [id], onDelete: SetNull)
+  category    TournamentCategory?         @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  teams       TournamentParticipation[]
+  matches     Match[]
+
+  @@map("tournaments")
+}
+
+model TournamentCategory {
+  id          String     @id @default(cuid())
+  ad          String     @unique
+  aciklama    String?
+  sporTuru    SportType  @default(FOOTBALL)
+  aktif       Boolean    @default(true)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  // Relations
+  tournaments Tournament[]
+
+  @@map("tournament_categories")
+}
+
+enum TournamentStatus {
+  UPCOMING    // Yaklaşan
+  ONGOING     // Devam eden
+  COMPLETED   // Tamamlanmış
+  CANCELLED   // İptal edilmiş
+}
+
+model TournamentParticipation {
+  id           String   @id @default(cuid())
+  tournamentId String
+  teamId       String
+  joinedAt     DateTime @default(now())
+
+  // Relations
+  tournament   Tournament @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
+  team         Team       @relation(fields: [teamId], references: [id], onDelete: Cascade)
+
+  @@unique([tournamentId, teamId])
+  @@map("tournament_participations")
+}
+
+model Match {
+  id           String   @id @default(cuid())
+  tournamentId String
+  team1Id      String?
+  team2Id      String?
+  team1Score   Int      @default(0)
+  team2Score   Int      @default(0)
+  scheduledAt  DateTime
+  status       MatchStatus @default(SCHEDULED)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // Relations
+  tournament   Tournament @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
+
+  @@map("matches")
+}
+
+enum MatchStatus {
+  SCHEDULED   // Planlanmış
+  LIVE        // Canlı
+  COMPLETED   // Tamamlandı
+  CANCELLED   // İptal edildi
+}

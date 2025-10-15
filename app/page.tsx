@@ -1,103 +1,151 @@
-import Image from "next/image";
+'use client';
+
+import Link from 'next/link';
+import { useTheme } from 'next-themes';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Trophy, Users, Calendar, Award, Sun, Moon } from 'lucide-react';
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const { theme, setTheme } = useTheme();
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-cyan-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
+      {/* Theme Toggle - Fixed Position */}
+      <div className="fixed top-4 right-4 z-50">
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+          className="rounded-full shadow-lg border-2"
+        >
+          <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+          <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+          <span className="sr-only">Tema Değiştir</span>
+        </Button>
+      </div>
+      {/* Hero Section */}
+      <section className="container mx-auto px-4 py-16 md:py-24">
+        <div className="text-center space-y-8">
+          <div className="inline-block">
+            <div className="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-4 py-2 rounded-full text-sm font-semibold mb-4">
+              Turnuva Yönetim Sistemi
+            </div>
+          </div>
+
+          <h1 className="text-5xl md:text-7xl font-bold bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-600 bg-clip-text text-transparent leading-tight">
+            Turnuvalarınızı
+            <br />
+            Profesyonelce Yönetin
+          </h1>
+
+          <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto">
+            Kolay kullanımlı arayüz ile turnuvalarınızı organize edin,
+            takip edin ve yönetin.
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
+            <Link href="/register">
+              <Button
+                size="lg"
+                className="text-lg px-8 py-6 bg-orange-500 hover:bg-orange-600 text-white shadow-xl hover:shadow-2xl transition-all"
+              >
+                Hemen Başla
+              </Button>
+            </Link>
+            <Link href="/login">
+              <Button
+                size="lg"
+                variant="outline"
+                className="text-lg px-8 py-6 border-2 hover:bg-orange-50 border-orange-200 hover:border-orange-300 text-orange-600 shadow-lg"
+              >
+                Giriş Yap
+              </Button>
+            </Link>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </section>
+
+      {/* Features Section */}
+      <section className="container mx-auto px-4 py-16">
+        <h2 className="text-4xl font-bold text-center mb-12 bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+          Özellikler
+        </h2>
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <Card className="border-2 shadow-xl hover:shadow-2xl transition-shadow hover:scale-105 transform duration-200">
+            <CardContent className="pt-6 space-y-4">
+              <div className="w-14 h-14 bg-gradient-to-br from-purple-600 to-purple-400 rounded-2xl flex items-center justify-center">
+                <Trophy className="w-7 h-7 text-white" />
+              </div>
+              <h3 className="text-xl font-bold">Turnuva Yönetimi</h3>
+              <p className="text-muted-foreground">
+                Turnuvalarınızı kolayca oluşturun ve yönetin
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card className="border-2 shadow-xl hover:shadow-2xl transition-shadow hover:scale-105 transform duration-200">
+            <CardContent className="pt-6 space-y-4">
+              <div className="w-14 h-14 bg-gradient-to-br from-blue-600 to-blue-400 rounded-2xl flex items-center justify-center">
+                <Users className="w-7 h-7 text-white" />
+              </div>
+              <h3 className="text-xl font-bold">Takım Organizasyonu</h3>
+              <p className="text-muted-foreground">
+                Takımları organize edin ve yönetin
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card className="border-2 shadow-xl hover:shadow-2xl transition-shadow hover:scale-105 transform duration-200">
+            <CardContent className="pt-6 space-y-4">
+              <div className="w-14 h-14 bg-gradient-to-br from-cyan-600 to-cyan-400 rounded-2xl flex items-center justify-center">
+                <Calendar className="w-7 h-7 text-white" />
+              </div>
+              <h3 className="text-xl font-bold">Takvim Planlama</h3>
+              <p className="text-muted-foreground">
+                Maç programlarını otomatik oluşturun
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card className="border-2 shadow-xl hover:shadow-2xl transition-shadow hover:scale-105 transform duration-200">
+            <CardContent className="pt-6 space-y-4">
+              <div className="w-14 h-14 bg-gradient-to-br from-pink-600 to-pink-400 rounded-2xl flex items-center justify-center">
+                <Award className="w-7 h-7 text-white" />
+              </div>
+              <h3 className="text-xl font-bold">Skor Takibi</h3>
+              <p className="text-muted-foreground">
+                Sonuçları anlık olarak kaydedin ve paylaşın
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="container mx-auto px-4 py-16 mb-16">
+        <Card className="border-2 shadow-2xl bg-orange-500 text-white overflow-hidden">
+          <CardContent className="py-16 px-8 text-center relative">
+            <div className="relative z-10 space-y-6">
+              <h2 className="text-4xl md:text-5xl font-bold">
+                Hemen Başlamaya Hazır Mısınız?
+              </h2>
+              <p className="text-xl text-white/90 max-w-2xl mx-auto">
+                Ücretsiz hesap oluşturun ve turnuvalarınızı yönetmeye başlayın
+              </p>
+              <Link href="/register">
+                <Button
+                  size="lg"
+                  className="bg-white text-orange-600 hover:bg-gray-100 text-lg px-8 py-6 shadow-xl mt-4"
+                >
+                  Ücretsiz Kayıt Ol
+                </Button>
+              </Link>
+            </div>
+          </CardContent>
+        </Card>
+      </section>
     </div>
   );
 }
